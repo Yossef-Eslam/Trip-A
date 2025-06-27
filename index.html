@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trip A - Newsletter</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h2, h3 {
+      color: #333;
+    }
+
+    #form-container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 12px 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .thank-you-img {
+      width: 280px;
+      margin-top: 20px;
+      opacity: 0.9;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #thank-you {
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="form-container">
+    <h2>Subscribe to Trip A</h2>
+    <form id="newsletter-form">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <input type="text" name="country" placeholder="Your Country" required />
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+
+  <div id="thank-you" class="hidden">
+    <h3>Thanks for Subscribing! 🎉</h3>
+    <img src="thanks.png" class="thank-you-img" alt="Thank You" />
+  </div>
+
+  <script>
+    // Hide form if cookie is set
+    if (document.cookie.includes("tripA_subscribed=true")) {
+      document.getElementById("form-container").classList.add("hidden");
+      document.getElementById("thank-you").classList.remove("hidden");
+    }
+
+    // Submit form
+    document.getElementById("newsletter-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      // Replace this with your Mailchimp or Google Apps Script URL
+      const url = "https://gmail.us1.list-manage.com/subscribe/post?u=0a88cb1e833735369f9d147a0&id=4438edaee4";
+
+      fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        body: formData
+      }).then(() => {
+        document.cookie = "tripA_subscribed=true; max-age=31536000; path=/";
+        document.getElementById("form-container").classList.add("hidden");
+        document.getElementById("thank-you").classList.remove("hidden");
+      });
+    });
+  </script>
+<style>
+  #thank-you-img {
+    display: none;
+    margin-top: 20px;
+    opacity: 0.9;
+  }
+</style>
+
+<!-- بعد الفورم مباشرة -->
+<img id="thank-you-img" src="https://your-image-link.com/thanks.jpg" alt="Thank You" width="300"/>
+
+<script>
+  // نتابع الرد من Mailchimp
+  const form = document.getElementById("mc-embedded-subscribe-form");
+  const img = document.getElementById("thank-you-img");
+
+  form.addEventListener("submit", function () {
+    // ننتظر شويه ونفحص هل ظهر success message
+    setTimeout(() => {
+      const success = document.getElementById("mce-success-response");
+      if (success && success.style.display !== "none") {
+        img.style.display = "block";
+      }
+    }, 2000); // ننتظر 2 ثانية
+  });
+</script>
+<script>
+  const formContainer = document.getElementById("mc_embed_signup");
+  const COOKIE_NAME = "tripASubscribed";
+
+  // لو الكوكي موجودة، نخفي الفورم
+  if (document.cookie.includes(COOKIE_NAME)) {
+    formContainer.style.display = "none";
+    document.getElementById("thank-you-img").style.display = "block";
+  }
+
+  // بعد الاشتراك، نضيف الكوكي
+  const form = document.getElementById("mc-embedded-subscribe-form");
+  form.addEventListener("submit", function () {
+    setTimeout(() => {
+      const success = document.getElementById("mce-success-response");
+      if (success && success.style.display !== "none") {
+        document.cookie = `${COOKIE_NAME}=yes; max-age=31536000; path=/`;
+      }
+    }, 2000);
+  });
+</script>
+
+</body>
+</html>
