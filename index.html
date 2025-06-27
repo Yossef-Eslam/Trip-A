@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Trip A - Newsletter</title>
   <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
   <style>
@@ -16,39 +16,13 @@
       margin: 0;
     }
 
-    #form-container {
+    #mc_embed_signup {
       background: white;
       padding: 30px 40px;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
       max-width: 400px;
       width: 90%;
-    }
-
-    input[type="text"],
-    input[type="email"] {
-      width: 100%;
-      padding: 12px 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #0056b3;
     }
 
     #thank-you-img {
@@ -59,63 +33,71 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.15);
     }
-
-    .hidden {
-      display: none;
-    }
   </style>
 </head>
 <body>
 
-  <div id="form-container">
-    <h2>Subscribe to Trip A</h2>
-    <form id="newsletter-form">
-      <input type="text" name="FNAME" placeholder="Your Name" required />
-      <input type="email" name="EMAIL" placeholder="Your Email" required />
-      <input type="text" name="COMPANY" placeholder="Your Country" required />
-      <button type="submit">Subscribe</button>
-    </form>
-  </div>
+<!-- Mailchimp Form Start -->
+<div id="mc_embed_signup">
+  <form action="https://gmail.us1.list-manage.com/subscribe/post?u=0a88cb1e833735369f9d147a0&amp;id=4438edaee4" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+    <div id="mc_embed_signup_scroll">
+      <h2>Subscribe to Trip A</h2>
+      <div class="mc-field-group">
+        <label for="mce-FNAME">Name <span class="asterisk">*</span></label>
+        <input type="text" name="FNAME" class="required" id="mce-FNAME" required>
+      </div>
+      <div class="mc-field-group">
+        <label for="mce-EMAIL">Email <span class="asterisk">*</span></label>
+        <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required>
+      </div>
+      <div class="mc-field-group">
+        <label for="mce-COMPANY">Country <span class="asterisk">*</span></label>
+        <input type="text" name="COMPANY" class="required" id="mce-COMPANY" required>
+      </div>
+      <div id="mce-responses" class="clear foot">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+      </div>
+      <div style="position: absolute; left: -5000px;" aria-hidden="true">
+        <input type="text" name="b_0a88cb1e833735369f9d147a0_4438edaee4" tabindex="-1" value="">
+      </div>
+      <div class="clear">
+        <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Mailchimp Form End -->
 
-  <img id="thank-you-img" src="download.jpg" alt="Thank You Image" />
+<img id="thank-you-img" src="download.jpg" alt="Thank You Image">
 
-  <script>
-    const COOKIE_NAME = "tripA_subscribed";
+<script>
+  const COOKIE_NAME = "tripA_subscribed";
+  const formContainer = document.getElementById("mc_embed_signup");
+  const thankYouImg = document.getElementById("thank-you-img");
 
-    if (document.cookie.includes(`${COOKIE_NAME}=true`)) {
-      document.getElementById("form-container").classList.add("hidden");
-      document.getElementById("thank-you-img").style.display = "block";
-    }
+  // Check for cookie
+  if (document.cookie.includes(`${COOKIE_NAME}=true`)) {
+    formContainer.style.display = "none";
+    thankYouImg.style.display = "block";
+  }
 
-    document.getElementById("newsletter-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-
-      // Mailchimp Submission
-      const mailchimpURL = "https://gmail.us1.list-manage.com/subscribe/post?u=0a88cb1e833735369f9d147a0&id=4438edaee4";
-      fetch(mailchimpURL, {
-        method: "POST",
-        mode: "no-cors",
-        body: formData
-      }).then(() => {
+  // Wait for submission and success message
+  const form = document.getElementById("mc-embedded-subscribe-form");
+  form.addEventListener("submit", function () {
+    setTimeout(() => {
+      const success = document.getElementById("mce-success-response");
+      if (success && success.style.display !== "none") {
         document.cookie = `${COOKIE_NAME}=true; max-age=31536000; path=/`;
-        document.getElementById("form-container").classList.add("hidden");
-        document.getElementById("thank-you-img").style.display = "block";
-      });
+        formContainer.style.display = "none";
+        thankYouImg.style.display = "block";
+      }
+    }, 2000);
+  });
+</script>
 
-      // Zapier Webhook to Google Sheets
-     // const zapierWebhook = "https://hooks.zapier.com/hooks/catch/YOUR_ID/YOUR_TRIGGER_ID/"; // Replace with your actual Zapier URL
-      fetch(zapierWebhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.get("FNAME"),
-          email: formData.get("EMAIL"),
-          country: formData.get("COMPANY")
-        })
-      });
-    });
-  </script>
+<script src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
+<script>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[6]='COMPANY';ftypes[6]='text';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
 
 </body>
 </html>
