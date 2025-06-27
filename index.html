@@ -90,9 +90,10 @@
     document.getElementById("newsletter-form").addEventListener("submit", function (e) {
       e.preventDefault();
       const formData = new FormData(this);
-      const url = "https://gmail.us1.list-manage.com/subscribe/post?u=0a88cb1e833735369f9d147a0&id=4438edaee4";
 
-      fetch(url, {
+      // Mailchimp Submission
+      const mailchimpURL = "https://gmail.us1.list-manage.com/subscribe/post?u=0a88cb1e833735369f9d147a0&id=4438edaee4";
+      fetch(mailchimpURL, {
         method: "POST",
         mode: "no-cors",
         body: formData
@@ -100,6 +101,18 @@
         document.cookie = `${COOKIE_NAME}=true; max-age=31536000; path=/`;
         document.getElementById("form-container").classList.add("hidden");
         document.getElementById("thank-you-img").style.display = "block";
+      });
+
+      // Zapier Webhook to Google Sheets
+     // const zapierWebhook = "https://hooks.zapier.com/hooks/catch/YOUR_ID/YOUR_TRIGGER_ID/"; // Replace with your actual Zapier URL
+      fetch(zapierWebhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("FNAME"),
+          email: formData.get("EMAIL"),
+          country: formData.get("COMPANY")
+        })
       });
     });
   </script>
