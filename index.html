@@ -15,10 +15,6 @@
       margin: 0;
     }
 
-    h2, h3 {
-      color: #333;
-    }
-
     #form-container {
       background: white;
       padding: 30px 40px;
@@ -54,7 +50,8 @@
       background-color: #0056b3;
     }
 
-    .thank-you-img {
+    #thank-you-img {
+      display: none;
       width: 280px;
       margin-top: 20px;
       opacity: 0.9;
@@ -65,16 +62,6 @@
     .hidden {
       display: none;
     }
-
-    #thank-you {
-      text-align: center;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
   </style>
 </head>
 <body>
@@ -82,31 +69,29 @@
   <div id="form-container">
     <h2>Subscribe to Trip A</h2>
     <form id="newsletter-form">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="email" name="email" placeholder="Your Email" required />
-      <input type="text" name="country" placeholder="Your Country" required />
+      <input type="text" name="FNAME" placeholder="Your Name" required />
+      <input type="email" name="EMAIL" placeholder="Your Email" required />
+      <input type="text" name="COMPANY" placeholder="Your Country" required />
       <button type="submit">Subscribe</button>
     </form>
   </div>
 
-  <div id="thank-you" class="hidden">
-    <h3>Thanks for Subscribing! 🎉</h3>
-    <img src="thanks.png" class="thank-you-img" alt="Thank You" />
-  </div>
+  <img id="thank-you-img" src="download.jpg" alt="Thank You Image" />
+
 
   <script>
-    // Hide form if cookie is set
-    if (document.cookie.includes("tripA_subscribed=true")) {
+    const COOKIE_NAME = "tripA_subscribed";
+
+    // لو الكوكي موجودة، نخفي الفورم ونظهر الصورة
+    if (document.cookie.includes(`${COOKIE_NAME}=true`)) {
       document.getElementById("form-container").classList.add("hidden");
-      document.getElementById("thank-you").classList.remove("hidden");
+      document.getElementById("thank-you-img").style.display = "block";
     }
 
-    // Submit form
     document.getElementById("newsletter-form").addEventListener("submit", function (e) {
       e.preventDefault();
       const formData = new FormData(this);
 
-      // Replace this with your Mailchimp or Google Apps Script URL
       const url = "https://gmail.us1.list-manage.com/subscribe/post?u=0a88cb1e833735369f9d147a0&id=4438edaee4";
 
       fetch(url, {
@@ -114,60 +99,15 @@
         mode: "no-cors",
         body: formData
       }).then(() => {
-        document.cookie = "tripA_subscribed=true; max-age=31536000; path=/";
+        // نحفظ الكوكي
+        document.cookie = `${COOKIE_NAME}=true; max-age=31536000; path=/`;
+
+        // نخفي الفورم ونظهر الصورة فقط
         document.getElementById("form-container").classList.add("hidden");
-        document.getElementById("thank-you").classList.remove("hidden");
+        document.getElementById("thank-you-img").style.display = "block";
       });
     });
   </script>
-<style>
-  #thank-you-img {
-    display: none;
-    margin-top: 20px;
-    opacity: 0.9;
-  }
-</style>
-
-<!-- بعد الفورم مباشرة -->
-<img id="thank-you-img" src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/images/download.jpg" alt="Thank You" width="300"/>
-
-
-<script>
-  // نتابع الرد من Mailchimp
-  const form = document.getElementById("mc-embedded-subscribe-form");
-  const img = document.getElementById("thank-you-img");
-
-  form.addEventListener("submit", function () {
-    // ننتظر شويه ونفحص هل ظهر success message
-    setTimeout(() => {
-      const success = document.getElementById("mce-success-response");
-      if (success && success.style.display !== "none") {
-        img.style.display = "block";
-      }
-    }, 2000); // ننتظر 2 ثانية
-  });
-</script>
-<script>
-  const formContainer = document.getElementById("mc_embed_signup");
-  const COOKIE_NAME = "tripASubscribed";
-
-  // لو الكوكي موجودة، نخفي الفورم
-  if (document.cookie.includes(COOKIE_NAME)) {
-    formContainer.style.display = "none";
-    document.getElementById("thank-you-img").style.display = "block";
-  }
-
-  // بعد الاشتراك، نضيف الكوكي
-  const form = document.getElementById("mc-embedded-subscribe-form");
-  form.addEventListener("submit", function () {
-    setTimeout(() => {
-      const success = document.getElementById("mce-success-response");
-      if (success && success.style.display !== "none") {
-        document.cookie = `${COOKIE_NAME}=yes; max-age=31536000; path=/`;
-      }
-    }, 2000);
-  });
-</script>
 
 </body>
 </html>
